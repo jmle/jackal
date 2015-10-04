@@ -43,8 +43,6 @@ class Cannon extends FlxSprite {
 		updateAnimation();
 		updateOrigin();
 		rotateCannon();
-
-		FlxG.log.add("origin: " + origin);
 	}
 
 	private function updateAnimation():Void {
