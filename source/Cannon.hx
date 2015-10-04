@@ -14,6 +14,11 @@ class Cannon extends FlxSprite {
 
 		loadGraphic("assets/images/jeep-cannon.png", true, 32, 32);
 
+		width = 16;
+		height = 16;
+		offset.x += 8;
+		offset.y += 8;
+
 		setFacingFlip(FlxObject.RIGHT, true, false);
 		setFacingFlip(FlxObject.LEFT, false, false);
 
