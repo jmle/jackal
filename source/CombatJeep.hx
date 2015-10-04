@@ -122,9 +122,6 @@ class CombatJeep extends FlxSpriteGroup {
 
 		jeep.currentAngle = currentAngle;
 		cannon.currentAngle = currentAngle;
-		cannon.currentPosition = new FlxPoint(x, y);
-
-		FlxG.log.add("combat jeep: " + new FlxPoint(x, y));
 	}
 
 }
