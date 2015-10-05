@@ -17,6 +17,11 @@ class CombatJeep extends FlxSpriteGroup {
 	private var currentAngle:Float = 90;
 	private var targetAngle:Float;
 
+	private var up:Bool;
+	private var down:Bool;
+	private var left:Bool;
+	private var right:Bool;
+
 	public function new() {
 		super();
 
@@ -30,100 +35,108 @@ class CombatJeep extends FlxSpriteGroup {
 	public override function update():Void {
 		super.update();
 
-		calculateTargetAngle();
+		updateKeys();
+
+		if (up || down || left || right) {
+			calculateTargetAngle();
+			updateFacingDirection();
+			updateCurrentAngle();
+		} else {
+			velocity = new FlxPoint(0, 0);
+		}
 	}
 
-	// TODO: refactor method
-	private function calculateTargetAngle():Void {
-		var up:Bool = FlxG.keys.anyPressed(["UP"]);
-		var down:Bool = FlxG.keys.anyPressed(["DOWN"]);
-		var left:Bool = FlxG.keys.anyPressed(["LEFT"]);
-		var right:Bool = FlxG.keys.anyPressed(["RIGHT"]);
+	private function updateKeys():Void {
+		up = FlxG.keys.anyPressed(["UP"]);
+		down = FlxG.keys.anyPressed(["DOWN"]);
+		left = FlxG.keys.anyPressed(["LEFT"]);
+		right = FlxG.keys.anyPressed(["RIGHT"]);
 
 		if (up && down)
 			up = down = false;
 		if (left && right)
 			left = right = false;
+	}
 
-		if (up || down || left || right) {
-			var mA:Float = 0;
+	private function calculateTargetAngle():Void {
+		var mA:Float = 0;
 
-			if (up) {
-				mA = -90;
-				targetAngle = 90;
-				if (left) {
-					mA -= 45;
-					targetAngle = 135;
+		if (up) {
+			mA = -90;
+			targetAngle = 90;
+			if (left) {
+				mA -= 45;
+				targetAngle = 135;
+			}
+			else if (right) {
+				mA += 45;
+				targetAngle = 45;
+			}
+		}
+		else if (down) {
+			mA = 90;
+			targetAngle = 270;
+			if (left) {
+				mA += 45;
+				targetAngle = 225;
+			}
+			else if (right) {
+				mA -= 45;
+				targetAngle = 315;
+			}
+		}
+		else if (left) {
+			mA = 180;
+			targetAngle = mA;
+		}
+		else {
+			targetAngle = 0;
+		}
+
+		FlxAngle.rotatePoint(SPEED, 0, 0, 0, mA, velocity);
+	}
+
+	private function updateFacingDirection():Void {
+		// Facing direction must vary according to the current angle, not the target one
+		if (currentAngle < 90 || currentAngle > 270)
+			facing = FlxObject.RIGHT;
+		else if (currentAngle > 90 && currentAngle < 270)
+			facing = FlxObject.LEFT;
+		else if (currentAngle == 90)
+			facing = FlxObject.UP;
+		else
+			facing = FlxObject.DOWN;
+	}
+
+	private function updateCurrentAngle():Void {
+		if (currentAngle != targetAngle) {
+			// Fix angles greater than 360 or negative
+			if (currentAngle > 360)
+				currentAngle %= 360;
+			else if (currentAngle < 0)
+				currentAngle = 360 - currentAngle;
+
+			var diff:Float = Math.abs(currentAngle - targetAngle);
+
+			if (currentAngle > targetAngle) {
+				if (diff >= 180) {
+					currentAngle += SMOOTH;
 				}
-				else if (right) {
-					mA += 45;
-					targetAngle = 45;
+				else {
+					currentAngle -= SMOOTH;
+				}
+			} else {
+				if (diff >= 180) {
+					currentAngle -= SMOOTH;
+				}
+				else {
+					currentAngle += SMOOTH;
 				}
 			}
-			else if (down) {
-				mA = 90;
-				targetAngle = 270;
-				if (left) {
-					mA += 45;
-					targetAngle = 225;
-				}
-				else if (right) {
-					mA -= 45;
-					targetAngle = 315;
-				}
-			}
-			else if (left) {
-				mA = 180;
-				targetAngle = mA;
-			}
-			else {
-				targetAngle = 0;
-			}
-
-			// Facing direction must vary according to the current angle, not the target one
-			if (currentAngle < 90 || currentAngle > 270)
-				facing = FlxObject.RIGHT;
-			else if (currentAngle > 90 && currentAngle < 270)
-				facing = FlxObject.LEFT;
-			else if (currentAngle == 90)
-				facing = FlxObject.UP;
-			else
-				facing = FlxObject.DOWN;
-
-			if (currentAngle != targetAngle) {
-				// Fix angles greater than 360 or negative
-				if (currentAngle > 360)
-					currentAngle %= 360;
-				else if (currentAngle < 0)
-					currentAngle = 360 - currentAngle;
-
-				var diff:Float = Math.abs(currentAngle - targetAngle);
-
-				if (currentAngle > targetAngle) {
-					if (diff >= 180) {
-						currentAngle += SMOOTH;
-					}
-					else {
-						currentAngle -= SMOOTH;
-					}
-				} else {
-					if (diff >= 180) {
-						currentAngle -= SMOOTH;
-					}
-					else {
-						currentAngle += SMOOTH;
-					}
-				}
-			}
-
-			FlxAngle.rotatePoint(SPEED, 0, 0, 0, mA, velocity);
-		} else {
-			velocity = new FlxPoint(0, 0);
 		}
 
 		jeep.currentAngle = currentAngle;
 		cannon.currentAngle = currentAngle;
 	}
-
 }
 
