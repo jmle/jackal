@@ -1,5 +1,6 @@
 package;
 
+import jeep.CombatJeep;
 import flixel.FlxState;
 
 /**

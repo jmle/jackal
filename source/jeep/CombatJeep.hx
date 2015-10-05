@@ -1,5 +1,6 @@
-package ;
+package jeep;
 
+import jeep.Jeep;
 import flixel.util.FlxPoint;
 import flixel.util.FlxAngle;
 import flixel.FlxObject;
