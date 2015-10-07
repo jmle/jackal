@@ -1,5 +1,6 @@
 package jeep;
 
+import flixel.group.FlxTypedGroup;
 import jeep.Jeep;
 import flixel.util.FlxPoint;
 import flixel.util.FlxAngle;
@@ -21,12 +22,13 @@ class CombatJeep extends FlxSpriteGroup {
 	private var down:Bool;
 	private var left:Bool;
 	private var right:Bool;
+	private var fire:Bool;
 
-	public function new() {
+	public function new(bullets:FlxTypedGroup<Bullet>) {
 		super();
 
 		jeep = new Jeep();
-		cannon = new Cannon();
+		cannon = new Cannon(bullets);
 
 		add(jeep);
 		add(cannon);
@@ -36,6 +38,7 @@ class CombatJeep extends FlxSpriteGroup {
 		super.update();
 
 		updateKeys();
+		updateMouse();
 
 		if (up || down || left || right) {
 			calculateTargetAngle();
@@ -43,6 +46,10 @@ class CombatJeep extends FlxSpriteGroup {
 			updateCurrentAngle();
 		} else {
 			velocity = new FlxPoint(0, 0);
+		}
+
+		if (fire) {
+			shoot();
 		}
 	}
 
@@ -56,6 +63,10 @@ class CombatJeep extends FlxSpriteGroup {
 			up = down = false;
 		if (left && right)
 			left = right = false;
+	}
+
+	private function updateMouse():Void {
+		fire = FlxG.mouse.justPressed;
 	}
 
 	private function calculateTargetAngle():Void {
@@ -137,6 +148,12 @@ class CombatJeep extends FlxSpriteGroup {
 
 		jeep.currentAngle = currentAngle;
 		cannon.currentAngle = currentAngle;
+	}
+
+	private function shoot() {
+		if (fire) {
+			cannon.shoot();
+		}
 	}
 }
 

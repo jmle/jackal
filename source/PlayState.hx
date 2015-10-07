@@ -1,5 +1,6 @@
 package;
 
+import flixel.group.FlxTypedGroup;
 import jeep.CombatJeep;
 import flixel.FlxState;
 
@@ -8,8 +9,9 @@ import flixel.FlxState;
  */
 class PlayState extends FlxState
 {
-	public var level:TiledLevel;
+	private var level:TiledLevel;
 	private var combatJeep:CombatJeep;
+	private var bullets:FlxTypedGroup<Bullet>;
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -19,7 +21,10 @@ class PlayState extends FlxState
 		level = new TiledLevel("assets/maps/desert_1.tmx");
 		add(level.foregroundTiles);
 
-		combatJeep = new CombatJeep();
+		bullets = new FlxTypedGroup<Bullet>();
+		bullets.maxSize = 10;
+
+		combatJeep = new CombatJeep(bullets);
 		combatJeep.setPosition(0, 0);
 		add(combatJeep);
 

@@ -1,5 +1,6 @@
 package jeep;
 
+import flixel.group.FlxTypedGroup;
 import flixel.util.FlxAngle;
 import flixel.FlxG;
 import flixel.util.FlxPoint;
@@ -7,13 +8,16 @@ import jeep.CombatJeepComponent;
 
 class Cannon extends jeep.CombatJeepComponent {
 
-	public function new() {
+	private var bullets:FlxTypedGroup<Bullet>;
+
+	public function new(bullets:FlxTypedGroup<Bullet>) {
 		super();
 
 		loadGraphic("assets/images/jeep-cannon.png", true, 32, 32);
 		initialise();
 
 		origin = new FlxPoint(16, 22);
+		this.bullets = bullets;
 	}
 
 	public override function update():Void {
@@ -70,5 +74,9 @@ class Cannon extends jeep.CombatJeepComponent {
 		var dx:Float = y - FlxG.mouse.y;
 
 		angle = FlxAngle.asDegrees(Math.atan2(dy, dx));
+	}
+
+	public function shoot():Void {
+		bullets.recycle(Bullet).shoot(origin, angle);
 	}
 }

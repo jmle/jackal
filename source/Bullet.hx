@@ -1,5 +1,6 @@
 package ;
 
+import flixel.util.FlxAngle;
 import flixel.util.FlxPoint;
 import flixel.FlxSprite;
 
@@ -7,6 +8,8 @@ class Bullet extends FlxSprite {
 	private static var SPEED:Float = 180;
 
 	public function new() {
+		super();
+
 		loadGraphic("assets/images/bullet.png", false, 8, 8);
 	}
 
@@ -21,9 +24,9 @@ class Bullet extends FlxSprite {
 	public override function kill():Void {
 		if (!alive) return;
 
+		super.kill();
+
 		solid = false;
-		alive = false;
-		exists = false;
 		velocity.set(0, 0);
 	}
 
@@ -31,5 +34,7 @@ class Bullet extends FlxSprite {
 		super.reset(location.x, location.y);
 
 		solid = true;
+
+		FlxAngle.rotatePoint(SPEED, 0, 0, 0, angle, velocity);
 	}
 }
