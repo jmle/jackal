@@ -77,6 +77,9 @@ class Cannon extends jeep.CombatJeepComponent {
 	}
 
 	public function shoot():Void {
-		bullets.recycle(Bullet).shoot(origin, angle);
+		// TODO: Fix location
+		var location:FlxPoint = new FlxPoint(x + origin.x, y + origin.y);
+
+		bullets.recycle(Bullet).shoot(location, angle);
 	}
 }

@@ -28,6 +28,8 @@ class PlayState extends FlxState
 		combatJeep.setPosition(0, 0);
 		add(combatJeep);
 
+		add(bullets);
+
 		super.create();
 	}
 	
