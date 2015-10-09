@@ -35,6 +35,6 @@ class Bullet extends FlxSprite {
 
 		solid = true;
 
-		FlxAngle.rotatePoint(SPEED, 0, 0, 0, angle, velocity);
+		FlxAngle.rotatePoint(SPEED, 0, 0, 0, angle - 90, velocity);
 	}
 }
