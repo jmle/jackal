@@ -8,7 +8,7 @@ import jeep.CombatJeepComponent;
 
 class Cannon extends jeep.CombatJeepComponent {
 
-	private static var CANNON_LENGTH:Float = 8;
+	private static var CANNON_LENGTH:Float = 4;
 
 	private var bullets:FlxTypedGroup<Bullet>;
 
@@ -80,9 +80,10 @@ class Cannon extends jeep.CombatJeepComponent {
 
 	public function shoot():Void {
 		var location:FlxPoint = new FlxPoint(x + origin.x - offset.x, y + origin.y - offset.y);
-		location.x += Math.cos(angle) * CANNON_LENGTH;
-		location.y += Math.sin(angle) * CANNON_LENGTH;
+		location.x += Math.cos(angle + 90) * CANNON_LENGTH;
+		location.y += Math.sin(angle + 90) * CANNON_LENGTH;
 
+		FlxG.log.add("Shooting with angle: " + angle);
 		bullets.recycle(Bullet).shoot(location, angle);
 	}
 }
