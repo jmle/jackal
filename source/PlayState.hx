@@ -1,5 +1,7 @@
 package;
 
+import tilemap.GameMap;
+import flixel.FlxG;
 import flixel.group.FlxTypedGroup;
 import jeep.CombatJeep;
 import flixel.FlxState;
@@ -9,7 +11,7 @@ import flixel.FlxState;
  */
 class PlayState extends FlxState
 {
-	private var level:TiledLevel;
+	private var gameMap:GameMap;
 	private var combatJeep:CombatJeep;
 	private var bullets:FlxTypedGroup<Bullet>;
 
@@ -18,8 +20,10 @@ class PlayState extends FlxState
 	 */
 	override public function create():Void
 	{
-		level = new TiledLevel("assets/maps/desert_1.tmx");
-		add(level.foregroundTiles);
+		gameMap = new GameMap("assets/maps/desert_1.tmx", "assets/maps/desert_1.png");
+		for (layer in gameMap.layers) {
+			add(layer);
+		}
 
 		bullets = new FlxTypedGroup<Bullet>();
 		bullets.maxSize = 10;
@@ -47,7 +51,9 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
-		level.collideWithLevel(combatJeep);
+		for (layer in gameMap.layers) {
+			FlxG.collide(combatJeep, layer);
+		}
 
 		super.update();
 	}	

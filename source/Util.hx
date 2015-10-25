@@ -1,13 +1,18 @@
 package ;
 
-import flixel.util.FlxPoint;
 class Util {
-	public static var ZERO:FlxPoint = new FlxPoint(0, 0);
 
-	public static inline function turnLeft(current:Float, target:Float):Bool {
-		if (target == 0 && current >= 180)
-			target = 360;
+	/**
+	* Returns an iterator over the unique values of the given array.
+	*/
+	public static function unique(a:Array<Int>):Iterator<Int> {
+		var uniqueValues:Map<Int, Int> = new Map<Int, Int>();
 
-		return Math.abs(target - current) <= 180;
+		for (v in a) {
+			uniqueValues.set(v, 1);
+		}
+
+		return uniqueValues.keys();
 	}
+
 }
